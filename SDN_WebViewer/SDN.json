@@ -1,0 +1,251 @@
+{
+    "id": "TOP",
+    "type": "coupled",
+    "ports": {},
+    "ic": [
+        {
+            "from_model": "input_reader",
+            "from_port": "out",
+            "to_model": "SDN",
+            "to_port": "inputFromReaderToClient"
+        }
+    ],
+    "models": [
+        {
+            "id": "input_reader",
+            "type": "atomic",
+            "ports": {
+                "out": [
+                    {
+                        "name": "out",
+                        "message_type": "--",
+                        "port_kind": "out"
+                    }
+                ]
+            }
+        },
+        {
+            "id": "SDN",
+            "type": "coupled",
+            "ports": {
+                "in": [
+                    {
+                        "name": "inputFromReaderToClient",
+                        "message_type": "--",
+                        "port_kind": "in"
+                    }
+                ]
+            },
+            "ic": [
+                {
+                    "from_model": "client",
+                    "from_port": "outToSwitch",
+                    "to_model": "Controller",
+                    "to_port": "inputToSwitchFromClient"
+                },
+                {
+                    "from_model": "server",
+                    "from_port": "outToSwitch",
+                    "to_model": "Controller",
+                    "to_port": "inputToSwitchFromServer"
+                },
+                {
+                    "from_model": "Controller",
+                    "from_port": "outputFromSwitchToClient",
+                    "to_model": "client",
+                    "to_port": "inFromSwitch"
+                },
+                {
+                    "from_model": "Controller",
+                    "from_port": "outputFromSwitchToServer",
+                    "to_model": "server",
+                    "to_port": "inFromSwitch"
+                }
+            ],
+            "eic": [
+                {
+                    "from_port": "inputFromReaderToClient",
+                    "to_model": "client",
+                    "to_port": "inFromReader"
+                }
+            ],
+            "models": [
+                {
+                    "id": "client",
+                    "type": "atomic",
+                    "ports": {
+                        "out": [
+                            {
+                                "name": "outToSwitch",
+                                "message_type": "--",
+                                "port_kind": "out"
+                            }
+                        ],
+                        "in": [
+                            {
+                                "name": "inFromSwitch",
+                                "message_type": "--",
+                                "port_kind": "in"
+                            },
+                            {
+                                "name": "inFromReader",
+                                "message_type": "--",
+                                "port_kind": "in"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": "server",
+                    "type": "atomic",
+                    "ports": {
+                        "out": [
+                            {
+                                "name": "outToSwitch",
+                                "message_type": "--",
+                                "port_kind": "out"
+                            }
+                        ],
+                        "in": [
+                            {
+                                "name": "inFromSwitch",
+                                "message_type": "--",
+                                "port_kind": "in"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": "Controller",
+                    "type": "coupled",
+                    "ports": {
+                        "out": [
+                            {
+                                "name": "outputFromSwitchToClient",
+                                "message_type": "--",
+                                "port_kind": "out"
+                            },
+                            {
+                                "name": "outputFromSwitchToServer",
+                                "message_type": "--",
+                                "port_kind": "out"
+                            }
+                        ],
+                        "in": [
+                            {
+                                "name": "inputToSwitchFromClient",
+                                "message_type": "--",
+                                "port_kind": "in"
+                            },
+                            {
+                                "name": "inputToSwitchFromServer",
+                                "message_type": "--",
+                                "port_kind": "in"
+                            }
+                        ]
+                    },
+                    "ic": [
+                        {
+                            "from_model": "switch",
+                            "from_port": "outToController",
+                            "to_model": "sdnController",
+                            "to_port": "inFromSwitch"
+                        },
+                        {
+                            "from_model": "sdnController",
+                            "from_port": "outToSwitch",
+                            "to_model": "switch",
+                            "to_port": "inFromController"
+                        }
+                    ],
+                    "eic": [
+                        {
+                            "from_port": "inputToSwitchFromClient",
+                            "to_model": "switch",
+                            "to_port": "inFromClient"
+                        },
+                        {
+                            "from_port": "inputToSwitchFromServer",
+                            "to_model": "switch",
+                            "to_port": "inFromServer"
+                        }
+                    ],
+                    "eoc": [
+                        {
+                            "from_model": "switch",
+                            "from_port": "outToClient",
+                            "to_port": "outputFromSwitchToClient"
+                        },
+                        {
+                            "from_model": "switch",
+                            "from_port": "outToServer",
+                            "to_port": "outputFromSwitchToServer"
+                        }
+                    ],
+                    "models": [
+                        {
+                            "id": "sdnController",
+                            "type": "atomic",
+                            "ports": {
+                                "out": [
+                                    {
+                                        "name": "outToSwitch",
+                                        "message_type": "--",
+                                        "port_kind": "out"
+                                    }
+                                ],
+                                "in": [
+                                    {
+                                        "name": "inFromSwitch",
+                                        "message_type": "--",
+                                        "port_kind": "in"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": "switch",
+                            "type": "atomic",
+                            "ports": {
+                                "out": [
+                                    {
+                                        "name": "outToClient",
+                                        "message_type": "--",
+                                        "port_kind": "out"
+                                    },
+                                    {
+                                        "name": "outToServer",
+                                        "message_type": "--",
+                                        "port_kind": "out"
+                                    },
+                                    {
+                                        "name": "outToController",
+                                        "message_type": "--",
+                                        "port_kind": "out"
+                                    }
+                                ],
+                                "in": [
+                                    {
+                                        "name": "inFromClient",
+                                        "message_type": "--",
+                                        "port_kind": "in"
+                                    },
+                                    {
+                                        "name": "inFromServer",
+                                        "message_type": "--",
+                                        "port_kind": "in"
+                                    },
+                                    {
+                                        "name": "inFromController",
+                                        "message_type": "--",
+                                        "port_kind": "in"
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
